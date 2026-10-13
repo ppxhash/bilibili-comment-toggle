@@ -1,10 +1,10 @@
-// 后台服务：把工具栏图标点击 / Alt+C 快捷键转发给当前标签页
+// 后台服务：把工具栏图标点击 / Alt+C / Alt+A 快捷键转发给当前标签页
 // 无网络行为、无第三方代码。
 'use strict';
 
-function sendToggle(tabId) {
+function sendToggle(tabId, command) {
   if (typeof tabId === 'number') {
-    chrome.tabs.sendMessage(tabId, { type: 'toggle' }, function () {
+    chrome.tabs.sendMessage(tabId, { type: command }, function () {
       // 无接收方（如非 B 站页面）时静默忽略
       void chrome.runtime.lastError;
     });
@@ -12,13 +12,13 @@ function sendToggle(tabId) {
 }
 
 chrome.action.onClicked.addListener(function (tab) {
-  sendToggle(tab && tab.id);
+  sendToggle(tab && tab.id, 'toggle-comments');
 });
 
 chrome.commands.onCommand.addListener(function (command) {
-  if (command !== 'toggle-comments') return;
+  if (command !== 'toggle-comments' && command !== 'toggle-ads') return;
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    if (tabs && tabs[0]) sendToggle(tabs[0].id);
+    if (tabs && tabs[0]) sendToggle(tabs[0].id, command);
   });
 });
 

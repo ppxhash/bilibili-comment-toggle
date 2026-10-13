@@ -1,9 +1,18 @@
 {
   "manifest_version": 3,
   "name": "B站评论区开关 · 自写版",
-  "version": "1.0.0",
-  "description": "一键隐藏/显示 B 站视频页评论区。纯本地运行，不申请网络权限，无任何数据上报。",
-  "permissions": ["storage"],
+  "version": "1.2.0",
+  "description": "一键隐藏/显示 B 站视频页评论区，屏蔽信息流广告卡片与广告接口请求。纯本地运行，无任何数据上报。",
+  "permissions": ["storage", "declarativeNetRequest"],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "bili_ad_rules",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -15,7 +24,7 @@
     }
   ],
   "action": {
-    "default_title": "切换评论区显示/隐藏（也可按 Alt+C）"
+    "default_title": "切换评论区显示/隐藏（也可按 Alt+C）；广告屏蔽开关（Alt+A）"
   },
   "commands": {
     "toggle-comments": {
@@ -23,6 +32,12 @@
         "default": "Alt+C"
       },
       "description": "切换评论区显示/隐藏"
+    },
+    "toggle-ads": {
+      "suggested_key": {
+        "default": "Alt+A"
+      },
+      "description": "切换广告屏蔽开/关"
     }
   }
 }
